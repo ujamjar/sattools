@@ -1,0 +1,38 @@
+version = "0.1"
+description = "SAT tool interfaces"
+requires = "unix"
+archive(byte) = "sattools.cma"
+archive(byte, plugin) = "sattools.cma"
+archive(native) = "sattools.cmxa"
+exists_if = "sattools.cma"
+
+package "minisat" (
+  version = "0.1"
+  description = "minisat bindings"
+  requires = "ctypes.stubs sattools"
+  archive(byte) = "ominisat.cma"
+  archive(byte, plugin) = "ominisat.cma"
+  archive(native) = "ominisat.cmxa"
+  exists_if = "ominisat.cma"
+)
+
+package "picosat" (
+  version = "0.1"
+  description = "picosat bindings"
+  requires = "ctypes.stubs sattools"
+  archive(byte) = "opicosat.cma"
+  archive(byte, plugin) = "opicosat.cma"
+  archive(native) = "opicosat.cmxa"
+  exists_if = "opicosat.cma"
+)
+
+package "cryptominisat" (
+  version = "0.1"
+  description = "cryptominisat bindings"
+  requires = "ctypes.stubs sattools"
+  archive(byte) = "ocryptominisat.cma"
+  archive(byte, plugin) = "ocryptominisat.cma"
+  archive(native) = "ocryptominisat.cmxa"
+  exists_if = "ocryptominisat.cma"
+)
+

@@ -1,0 +1,22 @@
+opam-version: "1.2"
+maintainer: "andy.ray@ujamjar.com"
+authors: "andy.ray@ujamjar.com"
+homepage: "https://github.com/ujamjar/sattools"
+dev-repo: "https://github.com/ujamjar/sattools"
+bug-reports: "https://github.com/ujamjar/sattools/issues"
+build: [
+  [make "build"]
+]
+install: [
+  [make "install"]
+]
+remove: [
+  [make "uninstall"]
+]
+depends: [
+  "ocamlfind"
+  "base-bytes"
+  "base-unix"
+  "ctypes"
+]
+available: [ "ocaml-version" >= "4.01.0" ]

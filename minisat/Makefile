@@ -47,10 +47,12 @@ ominisat.cma ominisat.cmxa: \
 		-L. -lminisat -lstdc++ 
 
 test.byte: test.ml ominisat.cma
-	ocamlfind c -o test.byte -package ctypes.stubs -linkpkg -custom ../src/sattools.cma ominisat.cma test.ml
+	ocamlfind c -o test.byte -package ctypes.stubs -linkpkg -custom \
+		-I ../src ../src/sattools.cma ominisat.cma test.ml
 
 test.native: test.ml ominisat.cmxa
-	ocamlfind opt -o test.native -package ctypes.stubs -linkpkg ../src/sattools.cmxa ominisat.cmxa test.ml
+	ocamlfind opt -o test.native -package ctypes.stubs -linkpkg \
+		-I ../src ../src/sattools.cmxa ominisat.cmxa test.ml
 
 clean:
 	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.a *.o *.so \

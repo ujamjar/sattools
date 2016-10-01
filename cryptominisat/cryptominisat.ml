@@ -1,25 +1,12 @@
 module F = Cryptominisat_bindings.Bindings(Cryptominisat_stubs)
 
-type lbool = T | F | U
-
 exception Cryptominisat_bad_result_value
-
-let string_of_lbool = function
-  | T -> "true"
-  | F -> "false"
-  | U -> "undef"
 
 module L = struct
 
   module Vec = F.Vec
 
   (* low level interface *)
-  let lbool_of_int = function
-    | 0 -> T
-    | 1 -> F
-    | 2 -> U
-    | _ -> raise Cryptominisat_bad_result_value
-
   (* min-1 = max *)
   let max_long = Signed.Long.(sub min_int (of_int 1))
 
@@ -32,11 +19,11 @@ module L = struct
   let new_var = F.new_var
 
   let add_clause = F.add_clause
-  let solve = (fun t -> lbool_of_int (F.solve t))
+  let solve = (fun t -> Sattools.Lbool.of_int (F.solve t))
   let solve_with_assumptions = 
-    (fun t a -> lbool_of_int (F.solve_with_assumptions t a))
+    (fun t a -> Sattools.Lbool.of_int (F.solve_with_assumptions t a))
   let get_model = 
-    (fun t i -> lbool_of_int (F.get_model t i))
+    (fun t i -> Sattools.Lbool.of_int (F.get_model t i))
 
   let print_stats = F.print_stats
 
@@ -104,7 +91,7 @@ let get_model s i =
 
 let get_all_models s = 
   Array.init (s.num_vars+1) 
-    (fun i -> if i=0 then U else get_model s i)
+    (fun i -> if i=0 then `u else get_model s i)
 
 let print_stats s = L.print_stats s.solver
 
@@ -116,14 +103,14 @@ module X = struct
   let add_clause = add_clause
   let get_result s i = 
     match get_model s (i+1) with
-    | T -> (i+1)
-    | F -> -(i+1)
+    | `t -> (i+1)
+    | `f -> -(i+1)
     | _ -> 0
   let solve s = 
     let r = solve s in
     match r with
-    | T -> `sat (Array.to_list @@ Array.init s.num_vars @@ get_result s)
-    | F -> `unsat
+    | `t -> `sat (Array.to_list @@ Array.init s.num_vars @@ get_result s)
+    | `f -> `unsat
     | _ -> raise Cryptominisat_bad_result_value
 
 end

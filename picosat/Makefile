@@ -44,10 +44,12 @@ opicosat.cma opicosat.cmxa: \
 		-L. -lpicosat 
 
 test.byte: test.ml opicosat.cma
-	ocamlfind c -g -o test.byte -package ctypes.stubs -linkpkg -custom ../src/sattools.cma opicosat.cma test.ml
+	ocamlfind c -g -o test.byte -package ctypes.stubs -linkpkg -custom \
+		-I ../src ../src/sattools.cma opicosat.cma test.ml
 
 test.native: test.ml opicosat.cmxa
-	ocamlfind opt -o test.native -package ctypes.stubs -linkpkg ../src/sattools.cmxa opicosat.cmxa test.ml
+	ocamlfind opt -o test.native -package ctypes.stubs -linkpkg \
+		-I ../src ../src/sattools.cmxa opicosat.cmxa test.ml
 
 clean:
 	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.a *.o *.so \

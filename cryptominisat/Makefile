@@ -47,10 +47,12 @@ ocryptominisat.cma ocryptominisat.cmxa: \
 		-L. -lcryptominisat4 -lstdc++ 
 
 test.byte: test.ml ocryptominisat.cma
-	ocamlfind c -o test.byte -package ctypes.stubs -linkpkg -custom ../src/sattools.cma ocryptominisat.cma test.ml
+	ocamlfind c -o test.byte -package ctypes.stubs -linkpkg -custom \
+		-I ../src ../src/sattools.cma ocryptominisat.cma test.ml
 
 test.native: test.ml ocryptominisat.cmxa
-	ocamlfind opt -o test.native -package ctypes.stubs -linkpkg ../src/sattools.cmxa ocryptominisat.cmxa test.ml
+	ocamlfind opt -o test.native -package ctypes.stubs -linkpkg \
+		-I ../src ../src/sattools.cmxa ocryptominisat.cmxa test.ml
 
 clean:
 	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.a *.o *.so \

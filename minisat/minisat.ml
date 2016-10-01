@@ -1,34 +1,21 @@
 module F = Minisat_bindings.Bindings(Minisat_stubs)
 
-type lbool = T | F | U
-
 exception Minisat_bad_result_value
 exception Minisat_bad_clause
-
-let string_of_lbool = function
-  | T -> "true"
-  | F -> "false"
-  | U -> "undef"
 
 module L = struct
 
   module Vec = F.Vec
 
   (* low level interface *)
-  let lbool_of_int = function
-    | 0 -> T
-    | 1 -> F
-    | 2 -> U
-    | _ -> raise Minisat_bad_result_value
-
   let create = F.create
   let destroy = F.destroy
   let new_var = F.new_var
   let add_clause s x = if F.add_clause s x = 0 then raise Minisat_bad_clause else ()
-  let solve t = lbool_of_int (F.solve t)
-  let solve_with_assumptions t a = lbool_of_int (F.solve_with_assumptions t a)
+  let solve t = Sattools.Lbool.of_int (F.solve t)
+  let solve_with_assumptions t a = Sattools.Lbool.of_int (F.solve_with_assumptions t a)
   let simplify s = if F.simplify s = 0 then false else true
-  let value_of s x = lbool_of_int @@ F.value_of s x
+  let value_of s x = Sattools.Lbool.of_int @@ F.value_of s x
   let n_vars = F.n_vars
   let n_clauses = F.n_clauses
   let mem_use = F.mem_used
@@ -98,7 +85,7 @@ let get_model s i =
 
 let get_all_models s = 
   Array.init (s.num_vars+1) 
-    (fun i -> if i=0 then U else get_model s i)
+    (fun i -> if i=0 then `u else get_model s i)
 
 module X = struct
 
@@ -108,14 +95,14 @@ module X = struct
   let add_clause = add_clause
   let get_result s i = 
     match get_model s (i+1) with
-    | T -> (i+1)
-    | F -> -(i+1)
+    | `t -> (i+1)
+    | `f -> -(i+1)
     | _ -> 0
   let solve s = 
     let r = solve s in
     match r with
-    | T -> `sat (Array.to_list @@ Array.init s.num_vars @@ get_result s)
-    | F -> `unsat
+    | `t -> `sat (Array.to_list @@ Array.init s.num_vars @@ get_result s)
+    | `f -> `unsat
     | _ -> raise Minisat_bad_result_value
 
 end

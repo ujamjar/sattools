@@ -27,17 +27,17 @@ int minisat_stubs_simplify(solver solver) {
 
 int minisat_stubs_solve(solver solver) {
   if(solver->solve()) {
-    return 0;
-  } else {
     return 1;
+  } else {
+    return 0;
   }
 }
 
 int minisat_stubs_solve_with_assumptions(solver solver, vect assumptions) {
   if(solver->solve(*assumptions)) {
-    return 0;
-  } else {
     return 1;
+  } else {
+    return 0;
   }
 }
 

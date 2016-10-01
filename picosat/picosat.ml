@@ -81,13 +81,19 @@ module X = struct
     | `t -> (i+1)
     | `f -> -(i+1)
     | _ -> 0
-  let solve s = 
+  let solve_with_model s = 
     let r = solve s in
     match r with
     | `t -> `sat (Array.to_list @@ Array.init s.num_vars @@ get_result s)
     | `f -> `unsat
     | _ -> raise Picosat_bad_result_value
-
+  let solve s = 
+    let r = solve s in
+    match r with
+    | `t -> `sat ()
+    | `f -> `unsat
+    | _ -> raise Picosat_bad_result_value
+  let model s i = get_model s i
 end
 
 let () = Sattools.Libs.(add_solver "pico" (module X : Solver))

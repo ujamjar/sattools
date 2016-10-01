@@ -43,7 +43,7 @@ module Make(Cnf : Cnf) = struct
     | `crypto -> 
       ignore @@ Unix.system(sprintf "%s --verb=0 %s > %s" solver_name fin fout)
     | `mini -> 
-      ignore @@ Unix.system(sprintf "%s -verb=0 %s %s" solver_name fin fout)
+      ignore @@ Unix.system(sprintf "%s -verb=0 %s %s > /dev/null 2>&1" solver_name fin fout)
     | `pico -> 
       ignore @@ Unix.system(sprintf "%s %s > %s" solver_name fin fout)
 
@@ -124,11 +124,27 @@ module GenLib(X : sig
     val solver : Sattools.Solver.t
 end) = struct
   include X
-  type solver = int list list ref
-  let create () = ref []
-  let destroy _ = ()
-  let add_clause t s = t := s :: !t
-  let solve t = run ~solver:X.solver !t
+  type solver = 
+    {
+      mutable cnf : int list list;
+      mutable model : int list;
+    }
+  let create () = { cnf = []; model = [] }
+  let destroy t = (t.cnf <- []; t.model <- [])
+  let add_clause t s = t.cnf <- s :: t.cnf
+  let solve_with_model t = run ~solver:X.solver t.cnf
+  let solve t = 
+    match run ~solver:X.solver t.cnf with
+    | `unsat -> `unsat
+    | `sat x -> begin 
+      t.model <- x;
+      `sat ()
+    end
+  let model t x = 
+    let x = abs x in
+    if List.mem x t.model then `t
+    else if List.mem (-x) t.model then `f
+    else `u
 end
 
 (* picosat, minisat and cryptominisat interfaces via dimacs *)

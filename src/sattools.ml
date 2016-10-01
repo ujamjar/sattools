@@ -27,7 +27,9 @@ module Libs = struct
     val create : unit -> solver
     val destroy : solver -> unit
     val add_clause : solver -> int list -> unit
-    val solve : solver -> int list Result.t
+    val solve : solver -> unit Result.t
+    val solve_with_model : solver -> int list Result.t
+    val model : solver -> int -> Lbool.t
   end
 
   let solvers : (string * (module Solver)) list ref = ref []

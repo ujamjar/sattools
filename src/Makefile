@@ -33,10 +33,10 @@ tseitin.cmx: tseitin.cmi tseitin.ml
 	ocamlfind opt -c $(PACK) tseitin.ml
 
 sattools.cmo sattools.cmi: result.cmo lbool.cmo libs.cmo tseitin.cmo dimacs.cmo
-	ocamlfind c -pack -o sattools.cmo $<
+	ocamlfind c -pack -o sattools.cmo $?
 
 sattools.cmx: result.cmx lbool.cmx libs.cmx tseitin.cmx dimacs.cmx
-	ocamlfind opt -pack -o sattools.cmx $<
+	ocamlfind opt -pack -o sattools.cmx $?
 
 sattools.cma: sattools.cmo 
 	ocamlfind c -a -linkall -o sattools.cma sattools.cmo 

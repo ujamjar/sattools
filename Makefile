@@ -2,8 +2,7 @@
 
 all: build
 
-SAT = src/dimacs.cmi src/sattools.cmi src/tseitin.cmi \
-			src/sattools.cma src/sattools.cmxa src/sattools.a
+SAT = src/sattools.cmi src/sattools.cma src/sattools.cmxa src/sattools.a
 PICO = picosat/dllopicosat.so picosat/libopicosat.a picosat/opicosat.cma \
 			 picosat/opicosat.cmxa picosat/picosat.cmi picosat/opicosat.a
 MINI = minisat/dllominisat.so minisat/libominisat.a minisat/ominisat.cma \

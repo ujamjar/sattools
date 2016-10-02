@@ -15,7 +15,7 @@ module L = struct
     match F.solve t (-1) with
     | 0 -> `u 
     | 10 -> `t
-    | 20 -> `t
+    | 20 -> `f
     | _ -> raise Picosat_solver_error
   let deref s x = 
     match F.deref s x with

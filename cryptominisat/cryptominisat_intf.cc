@@ -30,8 +30,8 @@ void cryptominisat_stubs_new_var(SATSolver *s) { s->new_var(); }
 
 static int int_of_lbool(lbool b) {
   return 
-    b == l_True  ? 0 :
-    b == l_False ? 1 :
+    b == l_False ? 0 :
+    b == l_True  ? 1 :
     b == l_Undef ? 2 :
                    3; // error - not expected to happen
 }

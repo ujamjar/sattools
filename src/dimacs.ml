@@ -33,19 +33,21 @@ module Make(Cnf : Cnf) = struct
 
   let solver_name solver = 
     match solver with
-    | `crypto -> "cryptominisat4_simple"
-    | `mini -> "minisat"
-    | `pico -> "picosat"
+    | "dimacs-crypto" -> "cryptominisat4_simple"
+    | "dimacs-mini" -> "minisat"
+    | "dimacs-pico" -> "picosat"
+    | _ -> failwith ("unknown solver: " ^ solver)
 
   let run_solver solver fin fout = 
     let solver_name = solver_name solver in
     match solver with 
-    | `crypto -> 
+    | "dimacs-crypto" -> 
       ignore @@ Unix.system(sprintf "%s --verb=0 %s > %s" solver_name fin fout)
-    | `mini -> 
+    | "dimacs-mini" -> 
       ignore @@ Unix.system(sprintf "%s -verb=0 %s %s > /dev/null 2>&1" solver_name fin fout)
-    | `pico -> 
+    | "dimacs-pico" -> 
       ignore @@ Unix.system(sprintf "%s %s > %s" solver_name fin fout)
+    | _ -> failwith ("unknown solver: " ^ solver)
 
   let with_out_file name fn = 
     let f = open_out name in
@@ -100,7 +102,7 @@ module Make(Cnf : Cnf) = struct
 
   type 'a result = [ `unsat | `sat of 'a ]
 
-  let run ?(solver=`pico) cnf = 
+  let run ?(solver="dimacs-mini") cnf = 
     let fin = Filename.temp_file "sat_cnf_in" "hardcaml" in
     let fout = Filename.temp_file "sat_res_out" "hardcaml" in
     (* generate cfg file *)
@@ -121,7 +123,7 @@ include Make(IntList)
 
 (* generate interface libraries *)
 module GenLib(X : sig 
-    val solver : Sattools.Solver.t
+    val solver : string
 end) = struct
   include X
   type solver = 
@@ -147,19 +149,14 @@ end) = struct
     else `u
 end
 
-(* picosat, minisat and cryptominisat interfaces via dimacs *)
-module Dimacs_pico = GenLib(struct let solver = `pico end)
-module Dimacs_mini = GenLib(struct let solver = `mini end)
-module Dimacs_crypto = GenLib(struct let solver = `crypto end)
-
-let add_solver name solver = 
+let add_solver solver = 
   match Unix.system ("which " ^ solver_name solver ^ " > /dev/null") with
   | Unix.WEXITED 0 ->
     let module X = GenLib(struct let solver = solver end) in
-    Sattools.Libs.add_solver name (module X : Sattools.Libs.Solver)
+    Libs.add_solver solver (module X : Libs.Solver)
   | _ -> ()
 
-let () = add_solver "dimacs-pico" `pico
-let () = add_solver "dimacs-mini" `mini
-let () = add_solver "dimacs-crypto" `crypto
+let () = add_solver "dimacs-pico" 
+let () = add_solver "dimacs-mini" 
+let () = add_solver "dimacs-crypto" 
 

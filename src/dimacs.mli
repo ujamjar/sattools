@@ -13,10 +13,10 @@ module Make(Cnf : Cnf) : sig
   val write : out_channel -> Cnf.t -> unit
 
   (** read SAT result file *)
-  val read_sat_result : string -> int list Sattools.Result.t
+  val read_sat_result : string -> int list Result.t
 
   (** run SAT solver, parse and return results *)
-  val run : ?solver:[`pico|`mini|`crypto] -> Cnf.t -> int list Sattools.Result.t
+  val run : ?solver:string -> Cnf.t -> int list Result.t
 
 end
 

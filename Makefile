@@ -2,14 +2,21 @@
 
 all: build
 
-SAT = src/sattools.cmi src/sattools.cma src/sattools.cmxa src/sattools.a
-PICO = picosat/dllopicosat.so picosat/libopicosat.a picosat/opicosat.cma \
-			 picosat/opicosat.cmxa picosat/picosat.cmi picosat/opicosat.a
-MINI = minisat/dllominisat.so minisat/libominisat.a minisat/ominisat.cma \
-			 minisat/ominisat.cmxa minisat/minisat.cmi minisat/ominisat.a
+SAT =    src/sattools.cmi src/sattools.cma src/sattools.cmxa src/sattools.a \
+			   src/dimacs.cmti src/lbool.cmti src/libs.cmti src/result.cmti src/tseitin.cmti
+
+PICO =   picosat/dllopicosat.so picosat/libopicosat.a picosat/opicosat.cma \
+			   picosat/opicosat.cmxa picosat/picosat.cmi picosat/opicosat.a \
+			   picosat/picosat.cmti picosat/picosat_bindings.cmti
+
+MINI =   minisat/dllominisat.so minisat/libominisat.a minisat/ominisat.cma \
+			   minisat/ominisat.cmxa minisat/minisat.cmi minisat/ominisat.a \
+			   minisat/minisat.cmti minisat/minisat_bindings.cmti
+
 CRYPTO = cryptominisat/dllocryptominisat.so cryptominisat/libocryptominisat.a \
 				 cryptominisat/ocryptominisat.cma cryptominisat/ocryptominisat.cmxa \
-				 cryptominisat/cryptominisat.cmi cryptominisat/ocryptominisat.a
+				 cryptominisat/cryptominisat.cmi cryptominisat/ocryptominisat.a \
+			   cryptominisat/cryptominisat.cmti cryptominisat/cryptominisat_bindings.cmti
 
 WITH_PICO = $(shell which picosat > /dev/null 2>&1; echo $$?)
 WITH_MINI = $(shell which minisat > /dev/null 2>&1; echo $$?)

@@ -4,8 +4,8 @@ all: test.byte test.native
 
 INC=`opam config var lib`/ctypes
 
-cryptominisat_bindings.cmo cryptominisat_bindings.cmi: cryptominisat_bindings.ml
-	ocamlfind c -c -package ctypes.stubs cryptominisat_bindings.ml
+cryptominisat_bindings.cmo cryptominisat_bindings.cmi: cryptominisat_bindings.mli cryptominisat_bindings.ml
+	ocamlfind c -c -bin-annot -package ctypes.stubs cryptominisat_bindings.mli cryptominisat_bindings.ml
 
 cryptominisat_bindings.cmx: cryptominisat_bindings.ml
 	ocamlfind opt -c -package ctypes.stubs cryptominisat_bindings.ml
@@ -25,15 +25,15 @@ cryptominisat_cstubs.o: cryptominisat_cstubs.c
 	gcc -c -shared -fPIC -I${INC} cryptominisat_cstubs.c
 
 cryptominisat_stubs.cmo cryptominisat_stubs.cmi: cryptominisat_stubs.ml
-	ocamlfind c -c -package ctypes.stubs cryptominisat_stubs.ml
+	ocamlfind c -c -bin-annot -package ctypes.stubs cryptominisat_stubs.ml
 
 cryptominisat_stubs.cmx: cryptominisat_stubs.ml
 	ocamlfind opt -c -package ctypes.stubs cryptominisat_stubs.ml
 
-cryptominisat.cmo cryptominisat.cmi: cryptominisat.ml cryptominisat_stubs.cmi
-	ocamlfind c -c -package ctypes.stubs -I ../src cryptominisat.ml
+cryptominisat.cmo cryptominisat.cmi: cryptominisat.mli cryptominisat.ml cryptominisat_stubs.cmo cryptominisat_bindings.cmo
+	ocamlfind c -c -bin-annot -package ctypes.stubs -I ../src cryptominisat.mli cryptominisat.ml
 
-cryptominisat.cmx: cryptominisat.ml cryptominisat_stubs.cmi
+cryptominisat.cmx: cryptominisat.ml cryptominisat_stubs.cmx cryptominisat_bindings.cmx
 	ocamlfind opt -c -package ctypes.stubs -I ../src cryptominisat.ml
 
 ocryptominisat.cma ocryptominisat.cmxa: \
@@ -55,7 +55,7 @@ test.native: test.ml ocryptominisat.cmxa
 		-I ../src ../src/sattools.cmxa ocryptominisat.cmxa test.ml
 
 clean:
-	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.a *.o *.so \
+	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.cmt *.cmti *.a *.o *.so \
 		*.byte *.native \
 		cryptominisat_cstubs.c cryptominisat_stubs.ml
 

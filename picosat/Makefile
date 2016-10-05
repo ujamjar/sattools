@@ -4,8 +4,8 @@ all: test.byte test.native
 
 INC=`opam config var lib`/ctypes
 
-picosat_bindings.cmo picosat_bindings.cmi: picosat_bindings.ml
-	ocamlfind c -c -package ctypes.stubs picosat_bindings.ml
+picosat_bindings.cmo picosat_bindings.cmi: picosat_bindings.mli picosat_bindings.ml
+	ocamlfind c -c -bin-annot -package ctypes.stubs picosat_bindings.mli picosat_bindings.ml
 
 picosat_bindings.cmx: picosat_bindings.ml
 	ocamlfind opt -c -package ctypes.stubs picosat_bindings.ml
@@ -22,15 +22,15 @@ picosat_cstubs.o: picosat_cstubs.c
 	gcc -c -shared -fPIC -I${INC} picosat_cstubs.c
 
 picosat_stubs.cmo picosat_stubs.cmi: picosat_stubs.ml
-	ocamlfind c -c -package ctypes.stubs picosat_stubs.ml
+	ocamlfind c -c -bin-annot -package ctypes.stubs picosat_stubs.ml
 
 picosat_stubs.cmx: picosat_stubs.ml
 	ocamlfind opt -c -package ctypes.stubs picosat_stubs.ml
 
-picosat.cmo picosat.cmi: picosat.ml picosat_stubs.cmi
-	ocamlfind c -c -package ctypes.stubs -I ../src picosat.ml
+picosat.cmo picosat.cmi: picosat.mli picosat.ml picosat_stubs.cmo picosat_bindings.cmo
+	ocamlfind c -c -bin-annot -package ctypes.stubs -I ../src picosat.mli picosat.ml
 
-picosat.cmx: picosat.ml picosat_stubs.cmi
+picosat.cmx: picosat.ml picosat_stubs.cmx picosat_bindings.cmx
 	ocamlfind opt -c -package ctypes.stubs -I ../src picosat.ml
 
 opicosat.cma opicosat.cmxa: \
@@ -52,7 +52,7 @@ test.native: test.ml opicosat.cmxa
 		-I ../src ../src/sattools.cmxa opicosat.cmxa test.ml
 
 clean:
-	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.a *.o *.so \
+	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.cmt *.cmti *.a *.o *.so \
 		*.byte *.native \
 		picosat_cstubs.c picosat_stubs.ml
 

@@ -4,8 +4,8 @@ all: test.byte test.native
 
 INC=`opam config var lib`/ctypes
 
-minisat_bindings.cmo minisat_bindings.cmi: minisat_bindings.ml
-	ocamlfind c -c -package ctypes.stubs minisat_bindings.ml
+minisat_bindings.cmo minisat_bindings.cmi: minisat_bindings.mli minisat_bindings.ml
+	ocamlfind c -c -bin-annot -package ctypes.stubs minisat_bindings.mli minisat_bindings.ml
 
 minisat_bindings.cmx: minisat_bindings.ml
 	ocamlfind opt -c -package ctypes.stubs minisat_bindings.ml
@@ -25,15 +25,15 @@ minisat_cstubs.o: minisat_cstubs.c
 	gcc -c -shared -fPIC -I${INC} minisat_cstubs.c
 
 minisat_stubs.cmo minisat_stubs.cmi: minisat_stubs.ml
-	ocamlfind c -c -package ctypes.stubs minisat_stubs.ml
+	ocamlfind c -c -bin-annot -package ctypes.stubs minisat_stubs.ml
 
 minisat_stubs.cmx: minisat_stubs.ml
 	ocamlfind opt -c -package ctypes.stubs minisat_stubs.ml
 
-minisat.cmo minisat.cmi: minisat.ml minisat_stubs.cmi
-	ocamlfind c -c -package ctypes.stubs -I ../src minisat.ml
+minisat.cmo minisat.cmi: minisat.ml minisat.mli minisat_stubs.cmo minisat_bindings.cmo
+	ocamlfind c -c -bin-annot -package ctypes.stubs -I ../src minisat.mli minisat.ml
 
-minisat.cmx: minisat.ml minisat_stubs.cmi
+minisat.cmx: minisat.ml minisat_stubs.cmx minisat_bindings.cmx
 	ocamlfind opt -c -package ctypes.stubs -I ../src minisat.ml
 
 ominisat.cma ominisat.cmxa: \
@@ -55,7 +55,7 @@ test.native: test.ml ominisat.cmxa
 		-I ../src ../src/sattools.cmxa ominisat.cmxa test.ml
 
 clean:
-	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.a *.o *.so \
+	rm -f *.cmo *.cmi *.cmx *.cma *.cmxa *.cmt *.cmti *.a *.o *.so \
 		*.byte *.native \
 		minisat_cstubs.c minisat_stubs.ml
 

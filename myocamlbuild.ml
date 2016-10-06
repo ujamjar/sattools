@@ -1,7 +1,5 @@
 open Ocamlbuild_plugin
 
-let ctypes_lib_dir = "/home/andyman/.opam/4.03.0/ctypes"
-
 let link libs = S (List.flatten @@ List.map (fun l -> [A "-cclib"; A ("-l" ^ l)]) libs)
 
 let () = dispatch @@ function
@@ -50,21 +48,13 @@ let () = dispatch @@ function
     flag ["ocaml"; "link"; "native"; "library"; "shared"; "use_minisat"] @@ S[A"-cclib"; A"-Lminisat"];
     flag ["ocaml"; "link"; "native"; "library"; "shared"; "use_picosat"] @@ S[A"-cclib"; A"-Lpicosat"];
     flag ["ocaml"; "link"; "native"; "library"; "shared"; "use_cryptominisat"] @@ S[A"-cclib"; A"-Lcryptominisat"];
-(*
-    (* link .cma *)
-    flag ["ocaml"; "link"; "byte"; "library"; "use_minisat"] @@ link_byte true "mini";
-    flag ["ocaml"; "link"; "byte"; "library"; "use_picosat"] @@ link_byte false "pico";
-    flag ["ocaml"; "link"; "byte"; "library"; "use_cryptominisat"] @@ link_byte true "cryptomini";
 
-    (* link .cmxa *)
-    flag ["ocaml"; "link"; "native"; "library"; "use_minisat"] @@ link_native true "mini";
-    flag ["ocaml"; "link"; "native"; "library"; "use_picosat"] @@ link_native false "pico";
-    flag ["ocaml"; "link"; "native"; "library"; "use_cryptominisat"] @@ link_native true "cryptomini";
-*)
+    (* byte code linking *)
     flag ["ocaml"; "link"; "byte"; "library"; "use_minisat"] @@ S[A"-dllib"; A"-lominisat"];
     flag ["ocaml"; "link"; "byte"; "library"; "use_picosat"] @@ S[A"-dllib"; A"-lopicosat"];
     flag ["ocaml"; "link"; "byte"; "library"; "use_cryptominisat"] @@ S[A"-dllib"; A"-locryptominisat"];
 
+    (* native code linkning *)
     flag ["ocaml"; "link"; "native"; "library"; "use_minisat"] @@ 
       link ["ominisat";"minisat";"stdc++"];
     flag ["ocaml"; "link"; "native"; "library"; "use_picosat"] @@ 

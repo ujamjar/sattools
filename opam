@@ -4,17 +4,11 @@ authors: "andy.ray@ujamjar.com"
 homepage: "https://github.com/ujamjar/sattools"
 dev-repo: "https://github.com/ujamjar/sattools"
 bug-reports: "https://github.com/ujamjar/sattools/issues"
-build: [
-  [make "build"]
-]
-install: [
-  [make "install"]
-]
-remove: [
-  [make "uninstall"]
-]
+build: [ ["ocaml" "pkg/pkg.ml" "build"] ]
 depends: [
-  "ocamlfind"
+  "ocamlfind" {build}
+  "ocamlbuild" {build}
+  "topkg" {build}
   "base-bytes"
   "base-unix"
   "ctypes"

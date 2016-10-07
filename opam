@@ -4,7 +4,7 @@ authors: "andy.ray@ujamjar.com"
 homepage: "https://github.com/ujamjar/sattools"
 dev-repo: "https://github.com/ujamjar/sattools"
 bug-reports: "https://github.com/ujamjar/sattools/issues"
-build: [ ["ocaml" "pkg/pkg.ml" "build"] ]
+build: [ [make "build"] ]
 depends: [
   "ocamlfind" {build}
   "ocamlbuild" {build}

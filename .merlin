@@ -8,3 +8,4 @@ B picosat
 B cryptominisat
 PKG ctypes.stubs
 PKG ctypes
+PKG topkg

@@ -11,6 +11,8 @@ depends: [
   "topkg" {build}
   "base-bytes"
   "base-unix"
+  "ctypes-foreign"
   "ctypes"
+  "astring"
 ]
 available: [ "ocaml-version" >= "4.01.0" ]

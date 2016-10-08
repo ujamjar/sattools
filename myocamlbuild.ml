@@ -2,6 +2,9 @@ open Ocamlbuild_plugin
 
 let link libs = S (List.flatten @@ List.map (fun l -> [A "-cclib"; A ("-l" ^ l)]) libs)
 
+let ctypes_inc =
+  [A "-ccopt"; A("-I" ^ getenv ~default:"." "CTYPES_INC_DIR")]
+
 let () = dispatch @@ function
   | Before_options ->
     Options.use_ocamlfind := true
@@ -35,9 +38,9 @@ let () = dispatch @@ function
                  A(env "%.cc"); A"-o"; A(env "%.o") ]));
 
     (* compile C file *)
-    flag ["c"; "compile"; "use_minisat"] @@ S[ A"-ccopt"; A"-shared"; ]; 
-    flag ["c"; "compile"; "use_picosat"] @@ S[ A"-ccopt"; A"-shared"; ]; 
-    flag ["c"; "compile"; "use_cryptominisat"] @@ S[ A"-ccopt"; A"-shared"; ]; 
+    flag ["c"; "compile"; "use_minisat"] @@ S([ A"-ccopt"; A"-shared"; ] @ ctypes_inc); 
+    flag ["c"; "compile"; "use_picosat"] @@ S([ A"-ccopt"; A"-shared"; ] @ ctypes_inc); 
+    flag ["c"; "compile"; "use_cryptominisat"] @@ S([ A"-ccopt"; A"-shared"; ] @ ctypes_inc); 
 
     (* linking c libs *)
     flag ["c"; "ocamlmklib"; "use_minisat" ] @@ S[ A"-lminisat"; A"-linkall" ];

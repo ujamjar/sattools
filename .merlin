@@ -9,3 +9,4 @@ B cryptominisat
 PKG ctypes.stubs
 PKG ctypes
 PKG topkg
+PKG astring

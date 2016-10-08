@@ -28,5 +28,3 @@ opam depext -y $OPAMPKG
 
 opam install $OPAMPKG
 
-# sanity check - which packages got built
-ocamlfind query | grep sattools

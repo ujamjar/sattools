@@ -59,11 +59,12 @@ module Make(Cnf : Cnf) = struct
   let read_sat_result fout = 
     let f = open_in fout in
     let result = 
-      match input_line f with
-      | "SATISFIABLE" | "SAT" | "s SATISFIABLE" -> `sat
-      | "UNSATISFIABLE" | "UNSAT" | "s UNSATISFIABLE" -> `unsat
-      | _ -> failwith "DIMACS bad output"
-      | exception _ -> failwith "DIMACS bad output"
+      try begin
+        match input_line f with
+        | "SATISFIABLE" | "SAT" | "s SATISFIABLE" -> `sat
+        | "UNSATISFIABLE" | "UNSAT" | "s UNSATISFIABLE" -> `unsat
+        | _ -> failwith "DIMACS bad output"
+      end with _ -> failwith "DIMACS bad output"
     in
     if result = `sat then 
       let split_char sep str =
@@ -83,14 +84,13 @@ module Make(Cnf : Cnf) = struct
         aux [] is 
       in
       let rec read_result_lines () = 
-        match input_line f with
-        | _ as line -> begin
+        try begin
+          let line = input_line f in
           let tokens = List.filter ((<>) "") @@ split_char ' ' line in
           match tokens with
           | "v" :: tl -> List.map int_of_string tl :: read_result_lines ()
           | _ as l -> List.map int_of_string l :: read_result_lines ()
-        end
-        | exception _ ->
+        end with _ ->
           []
       in
       let res = List.flatten @@ read_result_lines () in

@@ -75,7 +75,7 @@ module F :
 exception Cryptominisat_bad_result_value
 module L :
   sig
-    module Vec = F.Vec
+    module Vec : module type of F.Vec
     val max_long : Signed.Long.t
     val create :
       ?verbose:int ->

@@ -79,7 +79,7 @@ exception Minisat_bad_result_value
 exception Minisat_bad_clause
 
 module L : sig
-  module Vec = F.Vec
+  module Vec : module type of F.Vec
   val create :
     (unit ->
      F.sat_solver_s Ctypes.structure Ctypes_static.ptr Minisat_stubs.return)

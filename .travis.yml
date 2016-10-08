@@ -3,6 +3,6 @@ sudo: required
 script: bash -ex .travis-ci.sh
 env:
   - OCAML_VERSION=4.01.0 OPAM_VERSION=1.2.0 OPAMPKG=sattools DEPPKGS=""
-  - OCAML_VERSION=4.01.0 OPAM_VERSION=1.2.0 OPAMPKG=sattools DEPPKGS="minisat picosat"
+  - OCAML_VERSION=4.01.0 OPAM_VERSION=1.2.0 OPAMPKG=sattools DEPPKGS="minisat"
   - OCAML_VERSION=4.02.3 OPAM_VERSION=1.2.0 OPAMPKG=sattools DEPPKGS=""
-  - OCAML_VERSION=4.02.3 OPAM_VERSION=1.2.0 OPAMPKG=sattools DEPPKGS="minisat picosat"
+  - OCAML_VERSION=4.02.3 OPAM_VERSION=1.2.0 OPAMPKG=sattools DEPPKGS="minisat"

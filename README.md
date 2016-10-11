@@ -1,5 +1,7 @@
 # Sattools
 
+[![Build Status](https://travis-ci.org/ujamjar/sattools.svg?branch=master)](https://travis-ci.org/ujamjar/sattools)
+
 Interfaces to SAT solvers and related utility functions.
 
 The solvers can be accessed through DIMAC files, or through

@@ -1,4 +1,4 @@
-version = "0.1"
+version = "%{version}%"
 description = "SAT tool interfaces"
 requires = "unix"
 archive(byte) = "sattools.cma"
@@ -7,7 +7,7 @@ archive(native) = "sattools.cmxa"
 exists_if = "sattools.cma"
 
 package "minisat" (
-  version = "0.1"
+  version = "%{version}%"
   description = "minisat bindings"
   requires = "ctypes.stubs sattools"
   archive(byte) = "ominisat.cma"
@@ -17,7 +17,7 @@ package "minisat" (
 )
 
 package "picosat" (
-  version = "0.1"
+  version = "%{version}%"
   description = "picosat bindings"
   requires = "ctypes.stubs sattools"
   archive(byte) = "opicosat.cma"
@@ -27,7 +27,7 @@ package "picosat" (
 )
 
 package "cryptominisat" (
-  version = "0.1"
+  version = "%{version}%"
   description = "cryptominisat bindings"
   requires = "ctypes.stubs sattools"
   archive(byte) = "ocryptominisat.cma"

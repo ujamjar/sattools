@@ -39,7 +39,7 @@ let () = dispatch @@ function
 
     (* compile C file *)
     flag ["c"; "compile"; "use_minisat"] @@ S([ A"-ccopt"; A"-shared"; ] @ ctypes_inc); 
-    flag ["c"; "compile"; "use_picosat"] @@ S([ A"-ccopt"; A"-shared"; A"-ccopt"; A"-Ipicosat" ] @ ctypes_inc); 
+    flag ["c"; "compile"; "use_picosat"] @@ S([ A"-ccopt"; A"-shared"; A"-ccopt"; A"-I/usr/include/picosat" ] @ ctypes_inc); 
     flag ["c"; "compile"; "use_cryptominisat"] @@ S([ A"-ccopt"; A"-shared"; ] @ ctypes_inc); 
 
     (* linking c libs *)

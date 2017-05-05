@@ -12,6 +12,6 @@ let _ =
   | true, false ->
     Cstubs.write_ml Format.std_formatter ~prefix (module Picosat_bindings.Bindings)
   | false, true ->
-    print_endline "#include <picosat/picosat.h>";
+    print_endline "#include <picosat.h>";
     Cstubs.write_c Format.std_formatter ~prefix (module Picosat_bindings.Bindings)
 

@@ -150,7 +150,7 @@ end) = struct
 end
 
 let add_solver solver = 
-  match Unix.system ("which " ^ solver_name solver ^ " > /dev/null") with
+  match Unix.system ("which " ^ solver_name solver ^ " 2>&1 > /dev/null") with
   | Unix.WEXITED 0 ->
     let module X = GenLib(struct let solver = solver end) in
     Libs.add_solver solver (module X : Libs.Solver)

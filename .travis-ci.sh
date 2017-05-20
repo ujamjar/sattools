@@ -18,13 +18,14 @@ esac
 	 
 echo "yes" | sudo add-apt-repository ppa:$ppa
 sudo apt-get update -qq
-sudo apt-get install -qq ocaml ocaml-native-compilers camlp4-extra opam $DEPPKGS
+sudo apt-get install -qq ocaml ocaml-native-compilers camlp4-extra opam minisat
 export OPAMYES=1
 opam init 
 
 eval `opam config env`
-opam pin add -n $OPAMPKG -k git .
-opam depext -y $OPAMPKG
+opam pin add -n sattools -k git .
+opam pin add -n sattools-minisat -k git .
+opam depext -y sattools-minisat
 
-opam install $OPAMPKG
+opam install sattools-minisat
 

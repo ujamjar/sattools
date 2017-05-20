@@ -1,8 +1,5 @@
 (* ocaml nqueens.ml 4 *)
 
-#use "topfind";;
-#require "sattools.minisat";;
-
 let nqueens size = 
 
   (* generate rows/cols/diagonals *)

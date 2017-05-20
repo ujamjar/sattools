@@ -1,8 +1,3 @@
-(* ocaml sudoku.ml < puzzle.txt *)
-
-#use "topfind";;
-#require "sattools.minisat";;
-
 (* contraints *)
 
 module M = struct
@@ -56,12 +51,11 @@ let once_in_block_2 =
   (r 1 3) >>= fun l ->
     return [ n (3*i+x) (3*j+y) z; n (3*i+k) (3*j+l) z ]
 
-(* read puzzle *)
-
 (* create sat problem *)
 
 open Sattools.Libs
-module Sat = (val (get_solver @@ List.hd @@ available_solvers()))
+(*module Sat = (val (get_solver @@ List.hd @@ available_solvers())) *)
+module Sat = (val (get_solver "dimacs-pico"))
 
 let solve puzzle = 
   let open Printf in

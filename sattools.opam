@@ -1,0 +1,17 @@
+opam-version: "1.2"
+maintainer: "andy.ray@ujamjar.com"
+authors: "andy.ray@ujamjar.com"
+homepage: "https://github.com/ujamjar/sattools"
+dev-repo: "https://github.com/ujamjar/sattools.git"
+bug-reports: "https://github.com/ujamjar/sattools/issues"
+build: [ ["jbuilder" "build" "-p" name "-j" jobs] ]
+depends: [
+  "ocamlfind" {build}
+  "jbuilder" {build & >= "1.0+beta8"}
+  "base-bytes"
+  "base-unix"
+]
+available: [ ocaml-version >= "4.01.0" ]
+name: "sattools"
+version: "0.2.0"
+license: "ISC"

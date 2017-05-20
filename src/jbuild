@@ -1,0 +1,10 @@
+(jbuild_version 1)
+
+(library
+  ((name "sattools")
+   (synopsis "DIMACS interface to minisat, picosat and cryptominisat.")
+   (public_name "sattools")
+   (libraries (dynlink unix))
+   (library_flags (-linkall))))
+
+

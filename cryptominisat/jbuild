@@ -1,0 +1,28 @@
+(jbuild_version 1)
+
+(executable
+  ((name cryptominisat_stubgen)
+   (modules (cryptominisat_bindings cryptominisat_stubgen))
+   (libraries (ctypes.stubs))))
+
+(rule
+  ((targets (cryptominisat_stubs.ml))
+   (deps (cryptominisat_stubgen.exe))
+   (action (with-stdout-to cryptominisat_stubs.ml (run ${<} -ml)))))
+
+(rule
+  ((targets (cryptominisat_cstubs.c))
+   (deps (cryptominisat_stubgen.exe))
+   (action (with-stdout-to cryptominisat_cstubs.c (run ${<} -c)))))
+
+(library 
+  ((name "sattools_cryptominisat")
+   (synopsis "Ctypes interface for cryptominisat")
+   (public_name "sattools-cryptominisat")
+   (modules (cryptominisat_bindings cryptominisat_stubs cryptominisat))
+   (c_names (cryptominisat_cstubs))
+   (cxx_names (cryptominisat_intf))
+   (c_library_flags (-lcryptominisat4 -lstdc++))
+   (library_flags (-linkall))
+   (libraries (sattools ctypes.stubs))))
+ 

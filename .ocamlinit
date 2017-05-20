@@ -1,9 +1,0 @@
-#require "ctypes.stubs";;
-
-#directory "src";;
-#directory "minisat";;
-#directory "picosat";;
-#directory "cryptominisat";;
-
-#load "src/sattools.cma";;
-

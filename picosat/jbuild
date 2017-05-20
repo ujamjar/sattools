@@ -1,0 +1,28 @@
+(jbuild_version 1)
+
+(executable
+  ((name picosat_stubgen)
+   (modules (picosat_bindings picosat_stubgen))
+   (libraries (ctypes.stubs))))
+
+(rule
+  ((targets (picosat_stubs.ml))
+   (deps (picosat_stubgen.exe))
+   (action (with-stdout-to picosat_stubs.ml (run ${<} -ml)))))
+
+(rule
+  ((targets (picosat_cstubs.c))
+   (deps (picosat_stubgen.exe))
+   (action (with-stdout-to picosat_cstubs.c (run ${<} -c)))))
+
+(library 
+  ((name "sattools_picosat")
+   (synopsis "Ctypes interface for picosat")
+   (public_name "sattools-picosat")
+   (modules (picosat_bindings picosat_stubs picosat))
+   (c_names (picosat_cstubs))
+   (c_flags (-I /usr/include/picosat))
+   (c_library_flags (-lpicosat))
+   (library_flags (-linkall))
+   (libraries (sattools ctypes.stubs))))
+ 

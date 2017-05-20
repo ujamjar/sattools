@@ -1,0 +1,28 @@
+(jbuild_version 1)
+
+(executable
+  ((name minisat_stubgen)
+   (modules (minisat_bindings minisat_stubgen))
+   (libraries (ctypes.stubs))))
+
+(rule
+  ((targets (minisat_stubs.ml))
+   (deps (minisat_stubgen.exe))
+   (action (with-stdout-to minisat_stubs.ml (run ${<} -ml)))))
+
+(rule
+  ((targets (minisat_cstubs.c))
+   (deps (minisat_stubgen.exe))
+   (action (with-stdout-to minisat_cstubs.c (run ${<} -c)))))
+
+(library 
+  ((name "sattools_minisat")
+   (synopsis "Ctypes interface for minisat")
+   (public_name "sattools-minisat")
+   (modules (minisat_bindings minisat_stubs minisat))
+   (c_names (minisat_cstubs))
+   (cxx_names (minisat_intf))
+   (c_library_flags (-lminisat -lstdc++))
+   (library_flags (-linkall))
+   (libraries (sattools ctypes.stubs))))
+ 
